@@ -6,7 +6,57 @@
         xmlns:local="clr-namespace:PruebaExamen"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Window.Resources>
+        <local:PrediccionConverter x:Key="PrediccionConverter"/>
+        <local:TemperaturaConverter x:Key="TemperaturaConverter"/>
+    </Window.Resources>
+    <Grid Style="{StaticResource GridPadre}" x:Name="PadreGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="125"></ColumnDefinition>
+            <ColumnDefinition ></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <ListBox x:Name="SeleccionStackPanel" Grid.Column="0" ItemsSource="{Binding}" SelectedValuePath="PrediccionDia">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel  Orientation="Vertical" Style="{StaticResource ListBoxItem}" Width="90" >
+                        <TextBlock x:Name="DiaTextBlock" Text="{Binding Dia}" HorizontalAlignment="Center" ></TextBlock>
+                        <Image  x:Name="ImagenPrediccionImage" Source="{Binding Prediccion, Converter={StaticResource PrediccionConverter}}"  Width="50" Height="50"/>
+                        <TextBlock HorizontalAlignment="Center" >
+                            <Run x:Name="MaximaCelsiusTextBlock" Text="{Binding  MaximaFarenheit, Converter={StaticResource TemperaturaConverter}}"/>
+                            <Run Text="/"/>
+                            <Run  x:Name="minimaCelsiusTextBlock" Text="{Binding MinimaFarenheit, Converter={StaticResource TemperaturaConverter}}"/>
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <DockPanel Grid.Column="1">
+            <StackPanel DockPanel.Dock="Top">
+                <TextBlock Text="El tiempo en New York" Style="{StaticResource TextoCabecera}"></TextBlock>
+            </StackPanel>
+            <Grid DockPanel.Dock="Bottom" x:Name="PropiedadesGrid" DataContext="{Binding ElementName=SeleccionStackPanel, Path=SelectedItem,  Mode=TwoWay}" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <TextBlock Style="{StaticResource TextoPropiedades}" Text="Dia" Grid.Column="0" Grid.Row="0"></TextBlock>
+                <TextBlock Style="{StaticResource TextoPropiedades}" Text="Prediccion" Grid.Column="0" Grid.Row="1"></TextBlock>
+                <TextBlock Style="{StaticResource TextoPropiedades}" Text="Minima (F)" Grid.Column="0" Grid.Row="2"></TextBlock>
+                <TextBlock Style="{StaticResource TextoPropiedades}" Text="Maxima (F)" Grid.Column="0" Grid.Row="3"></TextBlock>
+                <TextBox Grid.Column="1" Grid.Row="0" Template="{DynamicResource TextBoxControlTemplate}" Text="{Binding Dia , Mode=TwoWay}"></TextBox>
+                <TextBox Grid.Column="1" Grid.Row="1" Template="{DynamicResource TextBoxControlTemplate}" Text="{Binding Prediccion,  Mode=TwoWay}"></TextBox>
+                <TextBox Grid.Column="1" Grid.Row="2" Template="{DynamicResource TextBoxControlTemplate}" Text="{Binding MinimaFarenheit,  Mode=TwoWay}"></TextBox>
+                <TextBox Grid.Column="1" Grid.Row="3" Template="{DynamicResource TextBoxControlTemplate}" Text="{Binding MaximaFarenheit,  Mode=TwoWay}"></TextBox>
+            </Grid>
+            <Image Style="{StaticResource NuevaYorkImagen}"></Image>
+        </DockPanel>
     </Grid>
 </Window>
